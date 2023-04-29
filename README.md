@@ -7,7 +7,7 @@ There are overall five courses:
 - C1 [Getting Started Data Visualization With R]() (Completed)
 - C2 [Data Visualization in R with ggplot2]() (Underconstruction)
 - C3 [Advanced Data Visualization with R]() (Not Start Yet)
-- C4 [Publishing Visualizations in R with Shiny and flexdashboard] (Not Start Yet)
+- C4 [Publishing Visualizations in R with Shiny and flexdashboard]() (Not Start Yet)
 - C5 [Data Visualization Capstone]() (Not Start Yet)
 
 
