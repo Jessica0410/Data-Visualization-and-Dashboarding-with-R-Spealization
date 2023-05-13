@@ -1,0 +1,149 @@
+---
+title: "Week 3 Peer Review"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+######DO NOT MODIFY. This will load required packages and data.
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggthemes)
+
+cces <- drop_na(read_csv(url("https://www.dropbox.com/s/ahmt12y39unicd2/cces_sample_coursera.csv?raw=1")))
+
+cel <- drop_na(read_csv(url("https://www.dropbox.com/s/4ebgnkdhhxo5rac/cel_volden_wiseman%20_coursera.csv?raw=1")))
+
+```
+
+Following the directions on the Coursera assignment page, you will make four original visualizations. Note that the data for the CCES and CEL data are imported in code in the R Markdown file.
+
+### Put your name here: OUYANG YUCHEN
+
+## Exercise 1
+
+Explain what you are visualizing here:The scatter plot below shows the relationship between the amount of the bill introduced and LES, grouping by whether the chair man or not. The black square area shows the distribution of LES and Bill introduced for most chiar people. 
+
+Put your figure here:
+
+```{r exercise1 scatter plot,echo=FALSE }
+
+####PUT YOUR CODE HERE
+chair_person<-
+  cel$chair|> recode(
+    `1` = "Yes",
+    `0` = "No"
+  )
+
+ggplot(cel, aes(x = les,y = all_bills, color = chair_person))+ 
+  geom_point()+
+  labs(x="Legislative effective score (LES)", y = "Bill introduced", 
+     color = "Chair or not",
+     title = "The bill introduced to the congress with different LES" ) +
+  annotate("rect", xmin = 2, xmax = 19, ymin = 0, ymax = 70, 
+           color = "black", alpha = .2) + 
+  annotate("text",x = 12, y = 85, label = "Most Chair People") +
+  theme_economist() + scale_colour_economist()
+  
+
+```
+
+## Exercise 2
+
+Explain what you are visualizing here: The group of facet histograms display the distributions of the income in different educational levels and genders
+
+Put your figure here:
+
+```{r exercise2 ,echo=FALSE}
+####PUT YOUR CODE HERE
+
+cces|>
+  filter(!is.na(educ),!is.na(gender),!is.na(faminc_new))|>
+  mutate(educ=recode(educ,
+                     `1` = "No high school",
+                     `2` = "High school graduate",
+                     `3` = "Some college",
+                     `4` = "2-year",
+                     `5` = "4-year",
+                     `6` = "Post-grad"),
+         gender=recode(gender,
+                       `1` = "Male",
+                       `2` = "Female"))|>
+  ggplot(aes(x=faminc_new,color = gender))+ 
+  geom_histogram(fill="white", alpha=.5, bins=16, position="dodge")+
+  guides(fill="none")+
+  facet_wrap(~educ)+
+  labs(x="Income",y="Number of people",
+       title = "Income for different education levels and genders")
+  
+```
+
+## Exercise 3
+
+Explain what you are visualizing here: The barplot below shows the race population distribution in 4 different regions.
+
+Put your figure here:
+
+```{r exercise3,echo=FALSE}
+####PUT YOUR CODE HERE
+cces|>
+  filter(!is.na(region),!is.na(race))|>
+  mutate(
+    region = recode(region, `1` = "Northwest",`2` = "Midwest",`3` = "South",`4` = "West"), 
+    race = recode(race,
+      `1` = "White",
+      `2` = "Black",
+      `3` = "Hispanic",
+      `4` = "Asian",
+      `5` = "Native American",
+      `6` = "Mixed",
+      `7` = "Other",
+      `8` = "Middle Eastern"))|>
+  filter(race != "White")|>
+  ggplot(aes(x=region,fill=race))+geom_bar()+
+  labs(title = "The population of race in different region (exclude white)", y = "population")
+```
+
+## Exercise 4
+
+Explain what you are visualizing here:
+
+Put your figure here:
+
+```{r exercise4-1,echo=FALSE}
+####PUT YOUR CODE HERE
+df<-cel|>
+  group_by(year)|>
+  count(female)
+df<-df|>
+  pivot_wider(
+    names_from = female,
+    values_from = n
+  )
+
+df<-
+  mutate(df, "total" = `0` + `1`)|>
+  rename("male" = `0`, "female" = `1`)
+
+df<-df|>
+  pivot_longer(
+    cols = c("female","male"),
+    names_to = "gender",
+    values_to = "population"
+  )
+df
+
+```
+
+```{r exercise4-2,echo=FALSE}
+####PUT YOUR CODE HERE
+df|>
+  ggplot(aes(x=year,y=population/total,color=gender))+
+  geom_line()+
+  geom_point()+
+  labs(y="ratio",
+       title="Change of ratio of male and female in congress over years")
+  
+
+```
