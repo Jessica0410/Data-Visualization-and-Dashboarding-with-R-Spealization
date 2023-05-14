@@ -1,5 +1,5 @@
 # Data Visualization and Dashboarding with R Spealization
-This repository is for the assignment of the course * Data Visualization and Dashboarding with R Spealization* in [Coursera](https://www.coursera.org/specializations/jhu-data-visualization-dashboarding-with-r).
+This repository is for the assignment of the course **Data Visualization and Dashboarding with R Spealization** in [Coursera](https://www.coursera.org/specializations/jhu-data-visualization-dashboarding-with-r).
 
 *Attention*: Please do not copy the answer straightaway, this repository is just for helping purpose.
 
